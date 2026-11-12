@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantão - Escalas de Enfermagem</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<button id="theme-toggle" class="theme-toggle" type="button"
+        onclick="toggleTheme()" aria-label="Ativar tema escuro" aria-pressed="false">
+  <span class="theme-toggle-icon" aria-hidden="true">☾</span>
+  <span class="theme-toggle-label">Tema escuro</span>
+</button>
+
+<!-- LOGIN -->
+
+<section id="login" class="login">
+  <div class="login-left">
+    <div class="brand">Plantão.</div>
+    <div class="login-message">
+      <small>HOSPITAL Ada Lovelance</small>
+      <h1>A escala certa, para cada plantão.</h1>
+      <p>Elaboração, validação e publicação das escalas de enfermagem, respeitando jornadas, descansos, férias e competências.</p>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-box">
+      <div class="eyebrow">ACESSO AO SISTEMA</div>
+      <h2>Entrar</h2>
+      <p class="description">Neste protótipo, escolha um perfil para simular o login.</p>
+
+      <div class="role selected" onclick="selectRole(this,'Coordenação geral')">
+        <div class="role-icon">◎</div>
+        <div class="role-info">
+          <strong>Coordenação geral</strong>
+          <small>Aprova e publica as escalas de todos os setores</small>
+        </div>
+        <span class="check">✓</span>
+      </div>
+
+      <div class="role" onclick="selectRole(this,'Coordenador de setor')">
+        <div class="role-icon">▤</div>
+        <div class="role-info">
+          <strong>Coordenador de setor</strong>
+          <small>Elabora a escala do seu setor e registra as trocas</small>
+        </div>
+        <span class="check"></span>
+      </div>
+
+      <div class="role" onclick="selectRole(this,'Profissional de Enfermagem')">
+        <div class="role-icon">♧</div>
+        <div class="role-info">
+          <strong>Profissional de Enfermagem</strong>
+          <small>Consulta sua escala e solicita trocas</small>
+        </div>
+        <span class="check"></span>
+      </div>
+
+      <div id="person-select" class="hidden" style="margin-top:12px">
+        <select id="person" class="field" style="width:100%">
+          <option value="">Selecione o profissional</option>
+          <option>Bianca Leal</option>
+          <option>Larissa Monteiro</option>
+          <option>Mateus Sampaio</option>
+          <option>Tatiane Correia</option>
+        </select>
+      </div>
+
+      <button class="btn btn-full" onclick="enterSystem()">Entrar　 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- SISTEMA -->
+
+<section id="system">
+
+<aside class="sidebar">
+  <div class="brand">Plantão.</div>
+  <div class="brand-sub">Escalas de enfermagem</div>
+
+  <nav class="menu">
+    <button class="active" onclick="showPage('dashboard',this)"><span class="menu-icon">▦</span><span>Painel</span></button>
+    <button onclick="showPage('escalas',this)"><span class="menu-icon">▣</span><span>Escalas</span></button>
+    <button onclick="showPage('profissionais',this)"><span class="menu-icon">♙</span><span>Profissionais</span></button>
+    <button onclick="showPage('setores',this)"><span class="menu-icon">▥</span><span>Setores</span></button>
+    <button onclick="showPage('disponibilidade',this)"><span class="menu-icon">✈</span><span>Disponibilidade e afastamentos</span></button>
+    <button onclick="showPage('trocas',this)"><span class="menu-icon">⇄</span><span>Trocas de plantão</span></button>
+    <button onclick="showPage('historico',this)"><span class="menu-icon">◴</span><span>Histórico</span></button>
+  </nav>
+
+  <div class="user-box">
+    <div class="avatar">CG</div>
+    <div><strong id="user-name">Coordenação geral</strong><small id="user-role">Coordenação geral</small></div>
+    <button class="logout" onclick="logout()" title="Sair">⇥</button>
+  </div>
+</aside>
+
+<div class="top-hospital">Hospital Ada Lovelance</div>
+
+<main>
+
+<!-- PAINEL -->
+
+<section id="dashboard" class="page active">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">PAINEL</div>
+      <h1>Olá, Coordenação geral</h1>
+      <p>Acompanhe o ciclo das escalas de enfermagem, do cadastro à publicação.</p>
+    </div>
+  </div>
+
+  <div class="grid-stats">
+    <div class="card"><div class="stat-icon">♙</div><div class="stat-number" id="total-prof">38</div><div class="stat-label">Profissionais ativos</div></div>
+    <div class="card"><div class="stat-icon">▥</div><div class="stat-number" id="total-setor">4</div><div class="stat-label">Setores</div></div>
+    <div class="card"><div class="stat-icon">◷</div><div class="stat-number">0</div><div class="stat-label">Escalas em aprovação</div></div>
+    <div class="card"><div class="stat-icon">⇄</div><div class="stat-number" id="total-trocas">1</div><div class="stat-label">Trocas pendentes</div></div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div>
+      <div class="card">
+        <div class="card-title">ESCALA MAIS RECENTE</div>
+        <div class="recent-title">Escala Clínica Médica – 05/10 a 11/10</div>
+        <div class="muted">05 de out – 11 de out · 0 inconsistências</div>
+        <div style="margin-top:15px"><span class="badge">● Rascunho</span></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <div class="card-title">FLUXO DA ESCALA ATUAL</div>
+        <div class="progress">
+          <div class="step done"><div class="dot"></div>Cadastros</div>
+          <div class="step current"><div class="dot"></div>Geração e ajustes</div>
+          <div class="step"><div class="dot"></div>Aprovação da Coordenação</div>
+          <div class="step"><div class="dot"></div>Aprovada</div>
+          <div class="step"><div class="dot"></div>Publicada</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">FÉRIAS E AFASTAMENTOS</div>
+      <p class="description">Nenhuma ausência prevista.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ESCALAS -->
+
+<section id="escalas" class="page">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">ELABORAÇÃO</div>
+      <h1>Escalas</h1>
+      <p>Cada coordenador elabora a escala do seu setor. A coordenação geral acompanha, aprova e publica.</p>
+    </div>
+    <select class="field" onchange="filterEscalas(this.value)">
+      <option value="Todas">Todas as situações</option>
+      <option>Rascunho</option>
+      <option>Publicada</option>
+    </select>
+  </div>
+  <div class="list" id="escala-list"></div>
+</section>
+
+<!-- PROFISSIONAIS -->
+
+<section id="profissionais" class="page">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">CADASTROS</div>
+      <h1>Profissionais</h1>
+      <p>Enfermeiros, técnicos e auxiliares. Profissionais inativos permanecem no histórico.</p>
+    </div>
+    <button class="btn" onclick="openModal('professional-modal')">＋ Novo profissional</button>
+  </div>
+
+  <div class="toolbar">
+    <input class="field" id="search-prof" placeholder="⌕ Buscar por nome ou COREN" oninput="renderProfessionals()">
+    <select class="field" id="filter-sector" onchange="renderProfessionals()">
+      <option value="">Todos os setores</option>
+      <option>UTI Adulto</option>
+      <option>Clínica Médica</option>
+      <option>Pronto-Socorro</option>
+      <option>Centro Cirúrgico</option>
+    </select>
+  </div>
+  <div class="muted" id="prof-count" style="margin-bottom:12px"></div>
+  <div class="list" id="professional-list"></div>
+</section>
+
+<!-- SETORES -->
+
+<section id="setores" class="page">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">CADASTROS</div>
+      <h1>Setores</h1>
+      <p>A necessidade de profissionais é definida por setor e turno. Cada setor possui um coordenador.</p>
+    </div>
+    <button class="btn" onclick="openModal('sector-modal')">＋ Novo setor</button>
+  </div>
+  <div class="sector-grid" id="sector-list"></div>
+</section>
+
+<!-- DISPONIBILIDADE -->
+
+<section id="disponibilidade" class="page">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">CADASTROS</div>
+      <h1>Disponibilidade e afastamentos</h1>
+      <p>Férias, licenças, afastamentos e solicitações de folga.</p>
+    </div>
+    <button class="btn" onclick="openModal('absence-modal')">＋ Registrar</button>
+  </div>
+  <div class="list" id="absence-list"></div>
+</section>
+
+<!-- TROCAS -->
+
+<section id="trocas" class="page">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">PLANTÕES</div>
+      <h1>Trocas de plantão</h1>
+      <p>O profissional solicita a troca e o coordenador do setor analisa e registra na escala.</p>
+    </div>
+    <select class="field" onchange="renderExchanges(this.value)">
+      <option value="Todos">Todas</option>
+      <option value="Pendente" selected>Pendente</option>
+      <option value="Aprovada">Aprovadas</option>
+      <option value="Recusada">Recusadas</option>
+    </select>
+  </div>
+  <div class="list" id="exchange-list"></div>
+</section>
+
+<!-- HISTÓRICO -->
+
+<section id="historico" class="page">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">AUDITORIA</div>
+      <h1>Histórico</h1>
+      <p>Registro de elaborações, alterações, autorizações, aprovações e publicações.</p>
+    </div>
+  </div>
+  <div class="toolbar">
+    <input class="field" id="search-history" placeholder="⌕ Buscar no histórico" oninput="renderHistory()">
+  </div>
+  <div class="card timeline" id="history-list"></div>
+</section>
+
+</main>
+</section>
+
+<!-- MODAL PROFISSIONAL -->
+
+<div class="modal" id="professional-modal">
+  <div class="modal-box">
+    <h2>Novo profissional</h2>
+    <label>Nome completo</label>
+    <input class="field" id="new-name" placeholder="Nome do profissional">
+    <label>Cargo</label>
+    <select class="field" id="new-position">
+      <option>Enfermeiro(a)</option>
+      <option>Técnico(a) de Enfermagem</option>
+      <option>Auxiliar de Enfermagem</option>
+    </select>
+    <label>Setor</label>
+    <select class="field" id="new-sector">
+      <option>UTI Adulto</option>
+      <option>Clínica Médica</option>
+      <option>Pronto-Socorro</option>
+      <option>Centro Cirúrgico</option>
+    </select>
+    <label>COREN</label>
+    <input class="field" id="new-coren" placeholder="COREN-SP 000000">
+    <div class="modal-actions">
+      <button class="btn btn-light" onclick="closeModals()">Cancelar</button>
+      <button class="btn" onclick="addProfessional()">Salvar cadastro</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SETOR -->
+
+<div class="modal" id="sector-modal">
+  <div class="modal-box">
+    <h2>Novo setor</h2>
+    <label>Nome do setor</label>
+    <input class="field" id="sector-name" placeholder="Ex.: Pediatria">
+    <label>Coordenador</label>
+    <input class="field" id="sector-coordinator" placeholder="Nome do coordenador">
+    <label>Descrição</label>
+    <input class="field" id="sector-description" placeholder="Descrição do setor">
+    <div class="modal-actions">
+      <button class="btn btn-light" onclick="closeModals()">Cancelar</button>
+      <button class="btn" onclick="addSector()">Salvar setor</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AFASTAMENTO -->
+
+<div class="modal" id="absence-modal">
+  <div class="modal-box">
+    <h2>Registrar ausência</h2>
+    <label>Profissional</label>
+    <input class="field" id="absence-name" placeholder="Nome do profissional">
+    <label>Tipo</label>
+    <select class="field" id="absence-type">
+      <option>Férias</option>
+      <option>Afastamento</option>
+      <option>Licença</option>
+      <option>Folga</option>
+    </select>
+    <label>Data inicial</label>
+    <input class="field" type="date" id="absence-start">
+    <label>Data final</label>
+    <input class="field" type="date" id="absence-end">
+    <div class="modal-actions">
+      <button class="btn btn-light" onclick="closeModals()">Cancelar</button>
+      <button class="btn" onclick="addAbsence()">Registrar</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
